@@ -31,12 +31,19 @@
 </template>
 
 <script>
+import sourceData from '@/data.json'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data () {
+    return {
+      sourceData: sourceData
+    }
   }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
