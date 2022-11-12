@@ -8,7 +8,7 @@
 
     <div class="post-list">
 
-      <div v-for="postId in posts"
+      <div v-for="postId in thread.posts"
            :key="postId"
            class="post"
       >
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     postById (postId) {
-      return this.posts.find(p => p.id === postId.id)
+      return this.posts.find(p => p.id === postId)
     },
     userById (userId) {
       return this.users.find(p => p.id === userId)
