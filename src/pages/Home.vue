@@ -1,27 +1,19 @@
 <template>
- <h1>Welcome to the thread list</h1>
-  <ThreadList :threads="threads"/>
+ <h1>Welcome to the form list</h1>
+  <FormList :forms="forms"/>
 </template>
 
 <script>
 import sourceData from '@/data.json'
-import ThreadList from '@/components/ThreadList'
+import FormList from '@/components/FormList'
 export default {
   name: 'PageHome',
-  components: { ThreadList },
+  components: {
+    FormList
+  },
   data () {
     return {
-      threads: sourceData.threads,
-      posts: sourceData.posts,
-      users: sourceData.users
-    }
-  },
-  methods: {
-    postById (postId) {
-      return this.posts.find(p => p.id === postId)
-    },
-    userById (userId) {
-      return this.users.find(p => p.id === userId)
+      forms: sourceData.forums
     }
   }
 }
