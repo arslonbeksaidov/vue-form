@@ -3,6 +3,7 @@ import PageHome from '@/pages/Home'
 import PageNotFound from '@/pages/NotFound'
 import { createRouter, createWebHistory } from 'vue-router'
 import dataJson from '@/data.json'
+import Form from '@/pages/Form'
 
 const routes = [
   {
@@ -33,6 +34,12 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: PageNotFound
+  },
+  {
+    path: '/form/:id',
+    name: 'Form',
+    component: Form,
+    props: true
   }
 ]
 
