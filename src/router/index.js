@@ -4,6 +4,7 @@ import PageNotFound from '@/pages/NotFound'
 import { createRouter, createWebHistory } from 'vue-router'
 import dataJson from '@/data.json'
 import Form from '@/pages/Form'
+import Category from '@/pages/Category'
 
 const routes = [
   {
@@ -39,6 +40,12 @@ const routes = [
     path: '/form/:id',
     name: 'Form',
     component: Form,
+    props: true
+  },
+  {
+    path: '/category/:id',
+    name: 'Category',
+    component: Category,
     props: true
   }
 ]

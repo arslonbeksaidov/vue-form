@@ -2,7 +2,8 @@
   <div class="col-full">
     <div class="forum-list">
       <h2 class="list-title">
-        <a href="category.html">Feedback &amp; Information</a>
+        <router-link v-if="categoryId" :to="{name: 'Category', params: {id: categoryId}}">{{ title }}</router-link>
+        <span v-else>Forums</span>
       </h2>
       <div class="forum-listing" v-for="form in forms" :key="form.id">
         <div class="forum-details">
@@ -28,6 +29,14 @@ export default {
     forms: {
       required: true,
       type: Array
+    },
+    title: {
+      type: String,
+      default: 'Forums'
+    },
+    categoryId: {
+      required: false,
+      type: String
     }
   },
   methods: {

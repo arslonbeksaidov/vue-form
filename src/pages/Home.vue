@@ -1,19 +1,19 @@
 <template>
  <h1>Welcome to the form list</h1>
-  <FormList :forms="forms"/>
+  <CategoryList :categories="categories"/>
 </template>
 
 <script>
 import sourceData from '@/data.json'
-import FormList from '@/components/FormList'
+import CategoryList from '@/components/CategoryList'
 export default {
   name: 'PageHome',
   components: {
-    FormList
+    CategoryList
   },
   data () {
     return {
-      forms: sourceData.forums
+      categories: sourceData.categories
     }
   }
 }
