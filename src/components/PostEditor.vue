@@ -35,9 +35,7 @@ export default {
   },
   methods: {
     save () {
-      const postId = 'post_tread' + Math.random()
       const post = {
-        id: postId,
         text: this.text,
         publishedAt: Math.floor(Date.now() / 1000),
         userId: 'Miej9zSGMRZKDvMXzfxjVOyv3RF3'
