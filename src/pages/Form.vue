@@ -19,7 +19,6 @@
 
 <script>
 import ThreadList from '@/components/ThreadList'
-import jsonData from '@/data.json'
 export default {
   props: {
     id: {
@@ -33,10 +32,10 @@ export default {
   },
   computed: {
     form () {
-      return jsonData.forums.find(form => form.id === this.id)
+      return this.$store.state.forums.find(form => form.id === this.id)
     },
     threads () {
-      return jsonData.threads.filter(thread => thread.forumId === this.id)
+      return this.$store.state.threads.filter(thread => thread.forumId === this.id)
     }
   }
 }

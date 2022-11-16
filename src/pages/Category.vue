@@ -8,7 +8,6 @@
 
 <script>
 import FormList from '@/components/FormList'
-import sourceData from '@/data.json'
 
 export default {
   name: 'CategoryPage',
@@ -23,12 +22,12 @@ export default {
   },
   computed: {
     category () {
-      return sourceData.categories.find(category => category.id === this.id)
+      return this.$store.state.categories.find(category => category.id === this.id)
     }
   },
   methods: {
     getFormsForCategory () {
-      return sourceData.forums.filter(forum => forum.categoryId === this.id)
+      return this.$store.state.forums.filter(forum => forum.categoryId === this.id)
     }
   }
 }

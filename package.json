@@ -12,7 +12,8 @@
     "dayjs": "^1.11.6",
     "lodash": "^4.17.21",
     "vue": "^3.2.13",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

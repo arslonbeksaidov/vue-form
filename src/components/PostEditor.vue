@@ -15,16 +15,22 @@
 </template>
 
 <script>
-import sourceData from '@/data.json'
-
 export default {
   name: 'PostEditor',
   data () {
     return {
-      threads: sourceData.threads,
-      posts: sourceData.posts,
-      users: sourceData.users,
       text: ''
+    }
+  },
+  computed: {
+    threads () {
+      return this.$store.state.threads
+    },
+    posts () {
+      return this.$store.state.posts
+    },
+    users () {
+      return this.$store.state.users
     }
   },
   methods: {

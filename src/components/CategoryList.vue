@@ -10,7 +10,7 @@
 
 <script>
 import FormList from '@/components/FormList'
-import sourceDate from '@/data.json'
+
 export default {
   name: 'CategoryList',
   props: {
@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     getFormsForCategory (category) {
-      return sourceDate.forums.filter(forum => forum.categoryId === category.id)
+      return this.$store.state.forums.filter(forum => forum.categoryId === category.id)
     }
   }
 }
