@@ -5,6 +5,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import dataJson from '@/data.json'
 import Form from '@/pages/Form'
 import Category from '@/pages/Category'
+import Profile from '@/pages/Profile'
 
 const routes = [
   {
@@ -41,6 +42,11 @@ const routes = [
     name: 'Form',
     component: Form,
     props: true
+  },
+  {
+    path: '/me',
+    name: 'ProfilePage',
+    component: Profile
   },
   {
     path: '/category/:id',

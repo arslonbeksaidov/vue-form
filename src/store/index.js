@@ -1,7 +1,31 @@
 import { createStore } from 'vuex'
 import jsonData from '@/data.json'
 export default createStore({
-  state: jsonData,
+  state: {
+    ...jsonData,
+    authId: 'FsCDAk9w8NeXEceLV87arpsXjnQ2'
+  },
+  getters: {
+    authUser: state => {
+      const user = state.users.find(user => user.id === state.authId)
+      if (!user) return null
+      return {
+        ...user,
+        get posts () {
+          return state.posts.filter(post => post.userId === user.id)
+        },
+        get postsCount () {
+          return this.posts.length
+        },
+        get threadsCount () {
+          return this.threads.length
+        },
+        get threads () {
+          return state.threads.filter(thread => thread.userId === user.id)
+        }
+      }
+    }
+  },
   actions: {
     createPost (context, post) {
       post.id = 'qqqq' + Math.random()
