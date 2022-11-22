@@ -1,5 +1,6 @@
 import PageThreadShow from '@/pages/ThreadShow'
 import PageHome from '@/pages/Home'
+import ThreadCreate from '@/pages/ThreadCreate'
 import PageNotFound from '@/pages/NotFound'
 import { createRouter, createWebHistory } from 'vue-router'
 import dataJson from '@/data.json'
@@ -31,6 +32,12 @@ const routes = [
         })
       }
     }
+  },
+  {
+    path: '/forum/:forumId/thread/create',
+    name: 'ThreadCreate',
+    component: ThreadCreate,
+    props: true
   },
   {
     path: '/:pathMatch(.*)*',
