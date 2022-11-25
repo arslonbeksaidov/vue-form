@@ -34,7 +34,7 @@ export default createStore({
       commit('setPost', { post })
       commit('appendPostToThread', { postId: post.id, threadId: post.threadId })
     },
-    createThread ({ commit, state, dispatch }, { text, title, forumId }) {
+    async createThread ({ commit, state, dispatch }, { text, title, forumId }) {
       const id = 'trtrtr' + Math.random()
       const publishedAt = Math.floor(Date.now() / 1000)
       const userId = state.authId
@@ -43,6 +43,7 @@ export default createStore({
       commit('appendThreadToForum', { forumId, threadId: id })
       commit('appendThreadToUser', { userId, threadId: id })
       dispatch('createPost', { text, threadId: id })
+      return state.threads.find(thread => thread.id === id)
     },
     updateUser ({ commit }, user) {
       commit('setUser', { user, userId: user.id })
