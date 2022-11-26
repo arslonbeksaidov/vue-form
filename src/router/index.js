@@ -7,6 +7,7 @@ import dataJson from '@/data.json'
 import Form from '@/pages/Form'
 import Category from '@/pages/Category'
 import Profile from '@/pages/Profile'
+import ThreadEdit from '@/pages/ThreadEdit'
 
 const routes = [
   {
@@ -37,6 +38,12 @@ const routes = [
     path: '/forum/:forumId/thread/create',
     name: 'ThreadCreate',
     component: ThreadCreate,
+    props: true
+  },
+  {
+    path: '/thread/:id/edit',
+    name: 'ThreadEdit',
+    component: ThreadEdit,
     props: true
   },
   {
