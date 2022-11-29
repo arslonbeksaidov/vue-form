@@ -4,6 +4,9 @@ import router from '@/router'
 import store from '@/store'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import { initializeApp } from 'firebase/app'
+import firebaseConfig from '@/config/firebase'
+initializeApp(firebaseConfig)
 const forumApp = createApp(App)
 const requireComponent = require.context(
   // The relative path of the components folder

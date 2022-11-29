@@ -1,10 +1,15 @@
 import { createStore } from 'vuex'
-import jsonData from '@/data.json'
+// import jsonData from '@/data.json'
 import { findById, upsert } from '@/helpers'
 
 export default createStore({
   state: {
-    ...jsonData,
+    // ...jsonData,
+    categories: [],
+    forums: [],
+    users: [],
+    threads: [],
+    posts: [],
     authId: 'FsCDAk9w8NeXEceLV87arpsXjnQ2'
   },
   getters: {
@@ -87,9 +92,8 @@ export default createStore({
     setPost (state, { post }) {
       upsert(state.posts, post)
     },
-    setUser (state, { user, userId }) {
-      const userIndex = state.users.findIndex(user => user.id === userId)
-      state.users[userIndex] = user
+    setUser (state, { user }) {
+      upsert(state.users, user)
     },
     setThread (state, { thread }) {
       upsert(state.threads, thread)
