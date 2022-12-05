@@ -89,13 +89,13 @@ export default createStore({
     updateUser ({ commit }, user) {
       commit('setItem', { resource: 'users', item: user })
     },
-    fetchThread ({ state, commit, dispatch }, { id }) {
+    fetchThread ({ dispatch }, { id }) {
       return dispatch('fetchItem', { resource: 'threads', id, emoji: '11' })
     },
-    fetchUser ({ state, commit, dispatch }, { id }) {
+    fetchUser ({ dispatch }, { id }) {
       return dispatch('fetchItem', { resource: 'users', id, emoji: '22' })
     },
-    fetchPost ({ state, commit, dispatch }, { id }) {
+    fetchPost ({ dispatch }, { id }) {
       return dispatch('fetchItem', { resource: 'posts', id, emoji: '22' })
     },
     fetchItem ({ state, commit }, { id, emoji, resource }) {
