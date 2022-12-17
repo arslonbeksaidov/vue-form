@@ -1,7 +1,7 @@
 <template>
   <div class="col-large push-top"
   >
-    <h1>{{thread.title}}
+    <h1>{{ thread.title }}
       <router-link :to="{ name: 'ThreadEdit', id: this.id }">
         <button class="btn btn-green btn-small">
           Edit Thread
@@ -9,9 +9,10 @@
       </router-link>
     </h1>
     <p>
-      By <a href="#">{{ thread.author?.name }}</a>, <AppDate :timestamp="thread.publishedAt"/>
+      By <a href="#">{{ thread.author?.name }}</a>,
+      <AppDate :timestamp="thread.publishedAt"/>
       <span style="float: right;margin-top: 2px" class="hide-mobile text-faded text-small">
-        {{thread.repliesCount}} replied by {{thread.contributorsCount}} contributors
+        {{ thread.repliesCount }} replied by {{ thread.contributorsCount }} contributors
       </span>
     </p>
     <PostList :posts="threadPosts"/>
@@ -22,6 +23,7 @@
 <script>
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
+
 export default {
   props: {
     id: {
@@ -63,11 +65,11 @@ export default {
     // fetch the user
     this.$store.dispatch('fetchUser', { id: thread.userId })
 
-    // fetch the posts
-    thread.posts.forEach(async (postId) => {
-      const post = await this.$store.dispatch('fetchPost', { id: postId })
-      this.$store.dispatch('fetchUser', { id: post.userId })
-    })
+    // fetch posts
+    const posts = await this.$store.dispatch('fetchPosts', { ids: thread.posts })
+    // fetch associated with posts
+    const users = posts.map(post => post.userId)
+    this.$store.dispatch('fetchUsers', { ids: users })
   }
 }
 </script>
