@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 import { findById, upsert } from '@/helpers'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
+import { commit } from 'lodash/seq'
 
 export default createStore({
   state: {
@@ -42,6 +43,9 @@ export default createStore({
     thread: state => {
       return (id) => {
         const thread = findById(state.threads, id)
+        if (!thread) {
+          return {}
+        }
         return {
           ...thread,
           get author () {
@@ -96,13 +100,34 @@ export default createStore({
       return dispatch('fetchItem', { resource: 'users', id, emoji: '22' })
     },
     fetchPost ({ dispatch }, { id }) {
-      return dispatch('fetchItem', { resource: 'posts', id, emoji: '22' })
+      return dispatch('fetchItem', { resource: 'posts', id, emoji: '33' })
+    },
+    fetchForum ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'forums', id, emoji: '44' })
+    },
+    fetchAllCategories ({ commit }) {
+      return new Promise((resolve) => {
+        firebase.firestore().collection('categories').onSnapshot((querySnapshot) => {
+          const categories = querySnapshot.docs.map(doc => {
+            const item = {
+              id: doc.id,
+              ...doc.data()
+            }
+            commit('setItem', { resource: 'categories', item })
+            return item
+          })
+          resolve(categories)
+        })
+      })
     },
     fetchPosts ({ dispatch }, { ids }) {
       return dispatch('fetchItems', { resource: 'posts', ids, emoji: 'post' })
     },
     fetchThreads ({ dispatch }, { ids }) {
       return dispatch('fetchItems', { resource: 'threads', ids, emoji: 'patoq' })
+    },
+    fetchForums ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'forums', ids, emoji: 'forum' })
     },
     fetchUsers ({ dispatch }, { ids }) {
       return dispatch('fetchItems', { resource: 'users', ids, emoji: 'odam' })
