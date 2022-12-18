@@ -3,12 +3,20 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 
 export default {
-  createPost ({ commit, state }, post) {
-    post.id = 'qqqq' + Math.random()
-    post.publishedAt = Math.floor(Date.now() / 1000)
+  async createPost ({ commit, state }, post) {
     post.userId = state.authId
-    commit('setItem', { resource: 'posts', item: post })
-    commit('appendPostToThread', { childId: post.id, parentId: post.threadId })
+    post.publishedAt = Math.floor(Date.now() / 1000)
+    const batch = firebase.firestore().batch()
+    const postRef = firebase.firestore().collection('posts').doc()
+    const threadRef = firebase.firestore().collection('threads').doc(post.threadId)
+    batch.set(postRef, post)
+    batch.update(threadRef, {
+      posts: firebase.firestore.FieldValue.arrayUnion(postRef.id),
+      contributors: firebase.firestore.FieldValue.arrayUnion(state.authId)
+    })
+    await batch.commit()
+    commit('setItem', { resource: 'posts', item: { ...post, id: postRef.id } })
+    commit('appendPostToThread', { childId: postRef.id, parentId: post.threadId })
     commit('appendContributorToThread', { childId: state.authId, parentId: post.threadId })
   },
   async createThread ({ commit, state, dispatch }, { text, title, forumId }) {
@@ -39,6 +47,7 @@ export default {
   */
   fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'threads', id, emoji: '11' }),
   fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'users', id, emoji: '22' }),
+  fetchAuthUser: ({ dispatch, state }) => dispatch('fetchItem', { resource: 'users', id: state.authId, emoji: '22' }),
   fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'categories', id, emoji: '22' }),
   fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'posts', id, emoji: '33' }),
   fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'forums', id, emoji: '44' }),
