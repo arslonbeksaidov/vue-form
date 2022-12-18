@@ -8,7 +8,8 @@
 
 <script>
 import FormList from '@/components/FormList'
-
+import { findById } from '@/helpers'
+import { mapActions } from 'vuex'
 export default {
   name: 'CategoryPage',
   props: {
@@ -22,13 +23,18 @@ export default {
   },
   computed: {
     category () {
-      return this.$store.state.categories.find(category => category.id === this.id)
+      return findById(this.$store.state.categories, this.id) || {}
     }
   },
   methods: {
+    ...mapActions(['fetchCategory', 'fetchForums']),
     getFormsForCategory () {
       return this.$store.state.forums.filter(forum => forum.categoryId === this.id)
     }
+  },
+  async created () {
+    const category = await this.fetchCategory({ id: this.id })
+    this.fetchForums({ ids: category.forums })
   }
 }
 </script>

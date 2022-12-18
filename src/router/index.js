@@ -19,20 +19,20 @@ const routes = [
     path: '/thread/:id',
     name: 'ThreadShow',
     props: route => ({ id: route.params.id }),
-    component: PageThreadShow,
-    beforeEnter (to, from, next) {
-      const threadExists = dataJson.threads.find(thread => thread.id === to.params.id)
-      if (threadExists) {
-        return next()
-      } else {
-        next({
-          name: 'NotFound',
-          params: { pathMatch: to.path.substring(1).split('/') },
-          query: to.query,
-          hash: to.hash
-        })
-      }
-    }
+    component: PageThreadShow
+    // beforeEnter (to, from, next) {
+    //   const threadExists = dataJson.threads.find(thread => thread.id === to.params.id)
+    //   if (threadExists) {
+    //     return next()
+    //   } else {
+    //     next({
+    //       name: 'NotFound',
+    //       params: { pathMatch: to.path.substring(1).split('/') },
+    //       query: to.query,
+    //       hash: to.hash
+    //     })
+    //   }
+    // }
   },
   {
     path: '/forum/:forumId/thread/create',

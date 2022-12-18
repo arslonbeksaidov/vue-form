@@ -19,6 +19,7 @@
 
 <script>
 import ThreadList from '@/components/ThreadList'
+import { mapActions } from 'vuex'
 export default {
   props: {
     id: {
@@ -39,10 +40,13 @@ export default {
       return this.forum.threads.map(threadId => this.$store.getters.thread(threadId)).filter(thread => thread.id)
     }
   },
+  methods: {
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUsers'])
+  },
   async created () {
-    const forum = await this.$store.dispatch('fetchForum', { id: this.id })
-    const threads = await this.$store.dispatch('fetchThreads', { ids: forum.threads })
-    const users = await this.$store.dispatch('fetchUsers', { ids: threads.map(thread => thread.userId) })
+    const forum = await this.fetchForum({ id: this.id })
+    const threads = await this.fetchThreads({ ids: forum.threads })
+    const users = await this.fetchUsers({ ids: threads.map(thread => thread.userId) })
     console.log(users)
   }
 }
