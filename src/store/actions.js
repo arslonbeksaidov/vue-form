@@ -21,15 +21,30 @@ export default {
     commit('appendContributorToThread', { childId: state.authId, parentId: post.threadId })
   },
   async createThread ({ commit, state, dispatch }, { text, title, forumId }) {
-    const id = 'trtrtr' + Math.random()
-    const publishedAt = Math.floor(Date.now() / 1000)
+    const publishedAt = firebase.firestore.FieldValue.serverTimestamp()
     const userId = state.authId
-    const thread = { forumId, publishedAt, title, userId, id }
-    commit('setItem', { resource: 'threads', item: thread })
-    commit('appendThreadToForum', { parentId: forumId, childId: id })
-    commit('appendThreadToUser', { parentId: userId, childId: id })
-    dispatch('createPost', { text, threadId: id })
-    return findById(state.threads, id)
+    const threadRef = firebase.firestore().collection('threads').doc()
+    const thread = { forumId, publishedAt, title, userId, id: threadRef.id }
+
+    const batch = firebase.firestore().batch()
+    const userRef = firebase.firestore().collection('users').doc(userId)
+    const forumRef = firebase.firestore().collection('forums').doc(forumId)
+
+    batch.set(threadRef, thread)
+    batch.update(userRef, {
+      threads: firebase.firestore.FieldValue.arrayUnion(threadRef.id)
+    })
+    batch.update(forumRef, {
+      threads: firebase.firestore.FieldValue.arrayUnion(threadRef.id)
+    })
+    await batch.commit()
+    const newThread = await threadRef.get()
+
+    commit('setItem', { resource: 'threads', item: { ...newThread.data(), id: newThread.id } })
+    commit('appendThreadToForum', { parentId: forumId, childId: threadRef.id })
+    commit('appendThreadToUser', { parentId: userId, childId: threadRef.id })
+    await dispatch('createPost', { text, threadId: threadRef.id })
+    return findById(state.threads, threadRef.id)
   },
   async updateThread ({ commit, state }, { title, text, id }) {
     const thread = findById(state.threads, id)
