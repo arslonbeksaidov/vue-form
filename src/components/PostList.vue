@@ -17,11 +17,21 @@
       </div>
 
       <div class="post-content">
-        <div>
-          <p>
+        <div class="col-full">
+          <PostEditor v-if="editing === post.id" :post="post"></PostEditor>
+          <p v-else>
             {{post.text}}
           </p>
         </div>
+        <a
+          @click.prevent="toggleEditMode(post.id)"
+          href="#"
+          style="margin-left: auto;"
+          class="link-unstyled"
+          title="Make a change">
+          <f-a-i icon="pencil"/>
+          <i class="fa fa-pencil"></i>
+        </a>
       </div>
       <div class="post-date text-faded">
         <AppDate :timestamp="post.publishedAt"/>
@@ -31,8 +41,15 @@
 </template>
 
 <script>
+import PostEditor from '@/components/PostEditor'
 export default {
   name: 'PostList',
+  components: { PostEditor },
+  data () {
+    return {
+      editing: null
+    }
+  },
   props: {
     posts: {
       required: true,
@@ -45,6 +62,9 @@ export default {
     }
   },
   methods: {
+    toggleEditMode (postId) {
+      this.editing = postId === this.editing ? null : postId
+    },
     userById (userId) {
       return this.$store.getters.user(userId)
     }

@@ -6,6 +6,8 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import firebase from 'firebase/compat/app'
 import firebaseConfig from '@/config/firebase'
+import FontAwesomeIcon from '@/plugins/FontAwesome'
+
 firebase.initializeApp(firebaseConfig)
 const forumApp = createApp(App)
 const requireComponent = require.context(
@@ -16,7 +18,6 @@ const requireComponent = require.context(
   // The regular expression used to match base component filenames
   /App[A-Z]\w+\.(vue|js)$/
 )
-
 requireComponent.keys().forEach(fileName => {
   // Get component config
   const componentConfig = requireComponent(fileName)
@@ -40,7 +41,7 @@ requireComponent.keys().forEach(fileName => {
     componentConfig.default || componentConfig
   )
 })
-
+forumApp.use(FontAwesomeIcon)
 forumApp.use(router)
 forumApp.use(store)
 forumApp.mount('#app')

@@ -1,4 +1,4 @@
-import { findById } from '@/helpers'
+import { docToResource, findById } from '@/helpers'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 
@@ -53,11 +53,19 @@ export default {
   async updateThread ({ commit, state }, { title, text, id }) {
     const thread = findById(state.threads, id)
     const post = findById(state.posts, thread.posts[0])
-    const nextThread = { ...thread, title }
-    const nextPost = { ...post, text }
-    commit('setItem', { resource: 'threads', item: nextThread })
-    commit('setItem', { resource: 'posts', item: nextPost })
-    return thread
+    let newThread = { ...thread, title }
+    let newPost = { ...post, text }
+    const threadRef = firebase.firestore().collection('threads').doc(id)
+    const postsRef = firebase.firestore().collection('posts').doc(post.id)
+    const batch = firebase.firestore().batch()
+    batch.update(threadRef, newThread)
+    batch.update(postsRef, newPost)
+    await batch.commit()
+    newThread = await threadRef.get()
+    newPost = await postsRef.get()
+    commit('setItem', { resource: 'threads', item: newThread })
+    commit('setItem', { resource: 'posts', item: newPost })
+    return docToResource(newThread)
   },
   updateUser ({ commit }, user) {
     commit('setItem', { resource: 'users', item: user })
