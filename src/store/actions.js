@@ -24,6 +24,20 @@ export default {
     commit('appendPostToThread', { childId: newPost.id, parentId: post.threadId })
     commit('appendContributorToThread', { childId: state.authId, parentId: post.threadId })
   },
+  async updatePost ({ commit, state, dispatch }, { text, id }) {
+    const post = {
+      text,
+      edited: {
+        at: firebase.firestore.FieldValue.serverTimestamp(),
+        by: state.authId,
+        moderated: false
+      }
+    }
+    const postRef = firebase.firestore().collection('posts').doc(id)
+    await postRef.update(post)
+    const updatePost = await postRef.get()
+    commit('setItem', { resource: 'posts', item: updatePost })
+  },
   async createThread ({ commit, state, dispatch }, { text, title, forumId }) {
     const publishedAt = firebase.firestore.FieldValue.serverTimestamp()
     const userId = state.authId
