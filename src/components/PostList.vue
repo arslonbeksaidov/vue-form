@@ -27,7 +27,7 @@
           </p>
         </div>
         <a
-          v-if="post.userId === authUser.id"
+          v-if="post.userId === $store.state.authId"
           @click.prevent="toggleEditMode(post.id)"
           href="#"
           style="margin-left: auto;"
@@ -64,7 +64,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['authUser']),
     users () {
       return this.$store.state.users
     }

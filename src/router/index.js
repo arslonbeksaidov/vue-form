@@ -8,6 +8,7 @@ import Form from '@/pages/Form'
 import Category from '@/pages/Category'
 import Profile from '@/pages/Profile'
 import ThreadEdit from '@/pages/ThreadEdit'
+import store from '@/store'
 
 const routes = [
   {
@@ -79,8 +80,7 @@ const routes = [
     props: true
   }
 ]
-
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior (to) {
@@ -90,3 +90,7 @@ export default createRouter({
     return scroll
   }
 })
+router.beforeEach(() => {
+  store.dispatch('unsubscribeAllSnapshots')
+})
+export default router
