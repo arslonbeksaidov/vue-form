@@ -1,15 +1,18 @@
 <template>
+  <div class="container" v-if="asyncDataStatus_ready">
   <h1>{{category.name}}</h1>
 <FormList
   :title="category.name"
   :forms="getFormsForCategory()"
 />
+  </div>
 </template>
 
 <script>
 import FormList from '@/components/FormList'
 import { findById } from '@/helpers'
 import { mapActions } from 'vuex'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 export default {
   name: 'CategoryPage',
   props: {
@@ -21,6 +24,7 @@ export default {
   components: {
     FormList
   },
+  mixins: [asyncDataStatus],
   computed: {
     category () {
       return findById(this.$store.state.categories, this.id) || {}
@@ -34,7 +38,8 @@ export default {
   },
   async created () {
     const category = await this.fetchCategory({ id: this.id })
-    this.fetchForums({ ids: category.forums })
+    await this.fetchForums({ ids: category.forums })
+    this.asyncDataStatus_fetched()
   }
 }
 </script>
