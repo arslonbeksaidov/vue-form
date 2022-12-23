@@ -3,12 +3,12 @@ import PageHome from '@/pages/Home'
 import ThreadCreate from '@/pages/ThreadCreate'
 import PageNotFound from '@/pages/NotFound'
 import { createRouter, createWebHistory } from 'vue-router'
-import dataJson from '@/data.json'
 import Form from '@/pages/Form'
 import Category from '@/pages/Category'
 import Profile from '@/pages/Profile'
 import ThreadEdit from '@/pages/ThreadEdit'
 import store from '@/store'
+import Register from '@/pages/Register'
 
 const routes = [
   {
@@ -78,6 +78,11 @@ const routes = [
     name: 'Category',
     component: Category,
     props: true
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
   }
 ]
 const router = createRouter({
