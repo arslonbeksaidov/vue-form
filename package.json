@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
+    "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint && firebase firestore:delete --all-collections && node firestoreImport",
     "lint": "vue-cli-service lint",
     "db:seed": "firebase firestore:delete --all-collections && node firestoreImport"
   },
