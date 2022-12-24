@@ -48,7 +48,7 @@
 
 <script>
 import PostEditor from '@/components/PostEditor'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   name: 'PostList',
   components: { PostEditor },

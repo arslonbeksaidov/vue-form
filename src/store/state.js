@@ -5,6 +5,6 @@ export default {
   users: [],
   threads: [],
   posts: [],
-  authId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',
+  authId: null,
   unsubscribes: []
 }

@@ -1,7 +1,7 @@
 import { docToResource, findById } from '@/helpers'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
-
+import 'firebase/compat/auth'
 export default {
   async createPost ({ commit, state }, post) {
     post.userId = state.authId
@@ -81,6 +81,45 @@ export default {
     commit('setItem', { resource: 'posts', item: newPost })
     return docToResource(newThread)
   },
+  async registerUserWithEmailAndPassword ({ dispatch }, { avatar = null, email, name, username, password }) {
+    const result = await firebase.auth().createUserWithEmailAndPassword(email, password)
+    await dispatch('createUser', { id: result.user.uid, email, name, username, avatar })
+    await dispatch('fetchAuthUser')
+  },
+  async signInWithEmailAndPassword ({ dispatch }, { password, email }) {
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+  },
+  async signOut ({ commit }) {
+    await firebase.auth().signOut()
+    commit('setAuthId', null)
+  },
+  async signWithGmail ({ dispatch }) {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    const response = await firebase.auth().signInWithPopup(provider)
+    const user = response.user
+    const userRef = firebase.firestore().collection('users').doc(user.uid)
+    const userDoc = userRef.get()
+    if (!userDoc.exists) {
+      return dispatch('createUser', {
+        id: user.uid,
+        name: user.displayName,
+        email: user.email,
+        username: user.email,
+        avatar: user.photoURL
+      })
+    }
+  },
+  async createUser ({ commit }, { id, email, name, username, avatar = null }) {
+    const registeredAt = firebase.firestore.FieldValue.serverTimestamp()
+    const usernameLower = username.toLowerCase()
+    email = email.toLowerCase()
+    const user = { avatar, email, name, username, usernameLower, registeredAt }
+    const userRef = await firebase.firestore().collection('users').doc(id)
+    userRef.set(user)
+    const newUser = await userRef.get()
+    commit('setItem', { resource: 'users', item: newUser })
+    return docToResource(newUser)
+  },
   updateUser ({ commit }, user) {
     commit('setItem', { resource: 'users', item: user })
   },
@@ -89,10 +128,15 @@ export default {
   */
   fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'threads', id, emoji: '11' }),
   fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'users', id, emoji: '22' }),
-  fetchAuthUser: ({ dispatch, state }) => dispatch('fetchItem', { resource: 'users', id: state.authId, emoji: '22' }),
   fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'categories', id, emoji: '22' }),
   fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'posts', id, emoji: '33' }),
   fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'forums', id, emoji: '44' }),
+  fetchAuthUser: ({ dispatch, state, commit }) => {
+    const userId = firebase.auth().currentUser?.uid
+    if (!userId) return
+    dispatch('fetchItem', { resource: 'users', id: userId, emoji: '22' })
+    commit('setAuthId', userId)
+  },
   /*
   * fetch multiple resources
   */

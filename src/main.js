@@ -5,11 +5,17 @@ import store from '@/store'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
 import firebaseConfig from '@/config/firebase'
 import FontAwesomeIcon from '@/plugins/FontAwesome'
 
 firebase.initializeApp(firebaseConfig)
 const forumApp = createApp(App)
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    store.dispatch('fetchAuthUser')
+  }
+})
 const requireComponent = require.context(
   // The relative path of the components folder
   './components',

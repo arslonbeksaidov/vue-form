@@ -1,6 +1,9 @@
 import { findById, upsert, docToResource } from '@/helpers'
 
 export default {
+  setAuthId (state, id) {
+    state.authId = id
+  },
   setItem (state, { resource, item }) {
     upsert(state[resource], docToResource(item))
   },
