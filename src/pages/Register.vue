@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     async registerWithGoogle () {
-      await this.$store.dispatch('signWithGmail')
+      await this.$store.dispatch('signInWithGmail')
       this.$router.push('/')
     },
     async register () {

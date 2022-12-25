@@ -6,5 +6,6 @@ export default {
   threads: [],
   posts: [],
   authId: null,
-  unsubscribes: []
+  unsubscribes: [],
+  authUserUnsubcribe: null
 }

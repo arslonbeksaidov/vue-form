@@ -4,6 +4,9 @@ export default {
   setAuthId (state, id) {
     state.authId = id
   },
+  setAuthUserUnsubcribe (state, unsubcribe) {
+    state.authUserUnsubcribe = unsubcribe
+  },
   setItem (state, { resource, item }) {
     upsert(state[resource], docToResource(item))
   },
