@@ -187,9 +187,13 @@ export default {
   fetchItem ({ state, commit }, { id, emoji, resource, handleUnsubcribe = null }) {
     return new Promise((resolve) => {
       const unsubcribe = firebase.firestore().collection(resource).doc(id).onSnapshot((doc) => {
-        const item = { ...doc.data(), id: doc.id }
-        commit('setItem', { resource, item })
-        resolve(item)
+        if (doc.exists) {
+          const item = { ...doc.data(), id: doc.id }
+          commit('setItem', { resource, item })
+          resolve(item)
+        } else {
+          resolve(null)
+        }
       })
       if (handleUnsubcribe) {
         handleUnsubcribe(unsubcribe)

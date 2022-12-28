@@ -10,6 +10,7 @@ import ThreadEdit from '@/pages/ThreadEdit'
 import store from '@/store'
 import Register from '@/pages/Register'
 import SignIn from '@/pages/SignIn'
+import { findById } from '@/helpers'
 
 const routes = [
   {
@@ -21,20 +22,21 @@ const routes = [
     path: '/thread/:id',
     name: 'ThreadShow',
     props: route => ({ id: route.params.id }),
-    component: PageThreadShow
-    // beforeEnter (to, from, next) {
-    //   const threadExists = dataJson.threads.find(thread => thread.id === to.params.id)
-    //   if (threadExists) {
-    //     return next()
-    //   } else {
-    //     next({
-    //       name: 'NotFound',
-    //       params: { pathMatch: to.path.substring(1).split('/') },
-    //       query: to.query,
-    //       hash: to.hash
-    //     })
-    //   }
-    // }
+    component: PageThreadShow,
+    async beforeEnter (to, from, next) {
+      await store.dispatch('fetchThread', { id: to.params.id })
+      const threadExists = findById(store.state.threads, to.params.id)
+      if (threadExists) {
+        return next()
+      } else {
+        next({
+          name: 'NotFound',
+          params: { pathMatch: to.path.substring(1).split('/') },
+          query: to.query,
+          hash: to.hash
+        })
+      }
+    }
   },
   {
     path: '/forum/:forumId/thread/create',
