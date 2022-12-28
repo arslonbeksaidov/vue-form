@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="flex-grid">
+    <div v-if="false" class="flex-grid">
       <div class="col-3 push-top">
         <UserProfileCard v-if="!edit" :user="user"/>
         <UserProfileCardEditor v-else :user="user"/>
@@ -27,6 +27,7 @@ import PostList from '@/components/PostList'
 import { mapGetters } from 'vuex'
 import UserProfileCard from '@/components/UserProfileCard'
 import UserProfileCardEditor from '@/components/UserProfileCardEditor'
+
 export default {
   name: 'ProfilePage',
   props: {
@@ -42,6 +43,9 @@ export default {
   },
   computed: {
     ...mapGetters({ user: 'authUser' })
+  },
+  created () {
+    this.$emit('ready')
   }
 }
 </script>

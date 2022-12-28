@@ -65,7 +65,8 @@ const routes = [
     component: Profile,
     meta: {
       toTop: true,
-      smoothScroll: true
+      smoothScroll: true,
+      requiresAuth: true
     }
   },
   {
@@ -86,6 +87,14 @@ const routes = [
     component: Register
   },
   {
+    path: '/logout',
+    name: 'SignOut',
+    async beforeEnter (to, from) {
+      await store.dispatch('signOut')
+      return { name: 'Home' }
+    }
+  },
+  {
     path: '/signin',
     name: 'SignIn',
     component: SignIn
@@ -101,7 +110,12 @@ const router = createRouter({
     return scroll
   }
 })
-router.beforeEach(() => {
+router.beforeEach(async (to, from) => {
+  await store.dispatch('initAuthentication')
+  if (to.meta.requiresAuth && !store.state.authId) {
+    return { name: 'Home' }
+  }
+  console.log(`message to ${to.name} from ${from.name}`)
   store.dispatch('unsubscribeAllSnapshots')
 })
 export default router

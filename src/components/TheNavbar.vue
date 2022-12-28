@@ -65,7 +65,7 @@
           <a href="profile.html">My Profile</a>
         </li>
         <li class="navbar-item mobile-only">
-          <a href="#">Logout</a>
+          <router-link :to="{ name: 'SignOut' }" >Logout</router-link>
         </li>
       </ul>
     </nav>

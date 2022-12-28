@@ -7,6 +7,9 @@ export default {
   setAuthUserUnsubcribe (state, unsubcribe) {
     state.authUserUnsubcribe = unsubcribe
   },
+  setAuthObserverUnsubcribe (state, unsubcribe) {
+    state.authObserverUnsubcribe = unsubcribe
+  },
   setItem (state, { resource, item }) {
     upsert(state[resource], docToResource(item))
   },

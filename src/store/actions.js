@@ -3,6 +3,22 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 import 'firebase/compat/auth'
 export default {
+  initAuthentication ({ dispatch, commit, state }) {
+    if (state.authObserverUnsubcribe) state.authObserverUnsubcribe()
+    return new Promise((resolve) => {
+      const unsubcribe = firebase.auth().onAuthStateChanged(async (user) => {
+        console.log('user state changed')
+        this.dispatch('unsubcribeAuthUserSnapshot')
+        if (user) {
+          await this.dispatch('fetchAuthUser')
+          resolve(user)
+        } else {
+          resolve(null)
+        }
+      })
+      commit('setAuthObserverUnsubcribe', unsubcribe)
+    })
+  },
   async createPost ({ commit, state }, post) {
     post.userId = state.authId
     post.publishedAt = firebase.firestore.FieldValue.serverTimestamp()
@@ -131,10 +147,10 @@ export default {
   fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'categories', id, emoji: '22' }),
   fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'posts', id, emoji: '33' }),
   fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'forums', id, emoji: '44' }),
-  fetchAuthUser: ({ dispatch, state, commit }) => {
+  fetchAuthUser: async ({ dispatch, state, commit }) => {
     const userId = firebase.auth().currentUser?.uid
     if (!userId) return
-    dispatch('fetchItem', {
+    await dispatch('fetchItem', {
       resource: 'users',
       id: userId,
       handleUnsubcribe: (unsubcribe) => {

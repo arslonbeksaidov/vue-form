@@ -41,7 +41,20 @@ export default {
   },
   methods: {
     save () {
+      this.$emit('clean')
       this.$emit('save', { ...this.forum })
+    }
+  },
+  watch: {
+    form: {
+      handler () {
+        if (this.forum.title !== this.title || this.forum.text !== this.text) {
+          this.$emit('dirty')
+        } else {
+          this.$emit('clean')
+        }
+      },
+      deep: true
     }
   }
 }

@@ -7,5 +7,6 @@ export default {
   posts: [],
   authId: null,
   unsubscribes: [],
-  authUserUnsubcribe: null
+  authUserUnsubcribe: null,
+  authObserverUnsubcribe: null
 }
