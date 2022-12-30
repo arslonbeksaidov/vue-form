@@ -44,7 +44,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['signInWithEmailAndPassword']),
+    ...mapActions('auth', ['signInWithEmailAndPassword']),
     async signIn () {
       try {
         await this.signInWithEmailAndPassword({ ...this.form })
@@ -54,7 +54,7 @@ export default {
       }
     },
     async signInWithGoogle () {
-      await this.$store.dispatch('signInWithGmail')
+      await this.$store.dispatch('auth/signInWithGmail')
       this.successRedirect()
     },
     successRedirect () {

@@ -30,17 +30,6 @@ export default {
       })
     }
   },
-  computed: {
-    threads () {
-      return this.$store.state.threads
-    },
-    posts () {
-      return this.$store.state.posts
-    },
-    users () {
-      return this.$store.state.users
-    }
-  },
   methods: {
     save () {
       this.$emit('save', { post: this.postCopy })

@@ -11,12 +11,6 @@ import FontAwesomeIcon from '@/plugins/FontAwesome'
 
 firebase.initializeApp(firebaseConfig)
 const forumApp = createApp(App)
-firebase.auth().onAuthStateChanged(user => {
-  store.dispatch('unsubcribeAuthUserSnapshot')
-  if (user) {
-    store.dispatch('fetchAuthUser')
-  }
-})
 const requireComponent = require.context(
   // The relative path of the components folder
   './components',

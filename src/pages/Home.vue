@@ -17,21 +17,18 @@ export default {
   mixins: [asyncDataStatus],
   computed: {
     categories () {
-      return this.$store.state.categories
+      return this.$store.state.categories.items
     }
   },
   methods: {
-    // ...mapActions(['fetchAllCategories', 'fetchForums']) or this version usage
-    ...mapActions({
-      getCats: 'fetchAllCategories',
-      getForums: 'fetchForums'
-    })
+    ...mapActions('categories', ['fetchAllCategories']),
+    ...mapActions('forums', ['fetchForums'])
   },
   async created () {
-    const categories = await this.getCats()
+    const categories = await this.fetchAllCategories()
     // flat [[1,2,3,4],[22,33,44,55],[5,6,7,8,9]] ni [1,2,3,4,22,33,44,55,5,6,7,8,9] ga o'tkazib beradi.
     const forumId = categories.map(category => category.forums).flat() // bu yerda map bitta listni ichida ikkita list qaytaradi
-    await this.getForums({ ids: forumId })
+    await this.fetchForums({ ids: forumId })
     this.asyncDataStatus_fetched()
   }
 }

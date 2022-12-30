@@ -58,11 +58,11 @@ export default {
   },
   methods: {
     async registerWithGoogle () {
-      await this.$store.dispatch('signInWithGmail')
+      await this.$store.dispatch('auth/signInWithGmail')
       this.$router.push('/')
     },
     async register () {
-      await this.$store.dispatch('registerUserWithEmailAndPassword', this.form)
+      await this.$store.dispatch('auth/registerUserWithEmailAndPassword', this.form)
       this.$router.push('/')
     }
   },

@@ -83,11 +83,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['authUser'])
+    ...mapGetters('auth', ['authUser'])
   },
   methods: {
     signOut () {
-      this.$store.dispatch('signOut')
+      this.$store.dispatch('auth/signOut')
     }
   }
 }
