@@ -48,14 +48,18 @@ export default {
     async signIn () {
       try {
         await this.signInWithEmailAndPassword({ ...this.form })
-        this.$router.push('/')
+        this.successRedirect()
       } catch (error) {
         alert(error.message)
       }
     },
     async signInWithGoogle () {
       await this.$store.dispatch('signInWithGmail')
-      this.$router.push('/')
+      this.successRedirect()
+    },
+    successRedirect () {
+      const redirectTo = this.$route.query.redirectTo || { name: 'Home' }
+      this.$router.push(redirectTo)
     }
   },
   created () {

@@ -92,7 +92,10 @@ const routes = [
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: Register,
+    meta: {
+      requiresGuest: true
+    }
   },
   {
     path: '/logout',
@@ -105,7 +108,10 @@ const routes = [
   {
     path: '/signin',
     name: 'SignIn',
-    component: SignIn
+    component: SignIn,
+    meta: {
+      requiresGuest: true
+    }
   }
 ]
 const router = createRouter({
@@ -121,6 +127,9 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
   await store.dispatch('initAuthentication')
   if (to.meta.requiresAuth && !store.state.authId) {
+    return { name: 'SignIn', query: { redirectTo: to.path } }
+  }
+  if (to.meta.requiresGuest && store.state.authId) {
     return { name: 'Home' }
   }
   console.log(`message to ${to.name} from ${from.name}`)
