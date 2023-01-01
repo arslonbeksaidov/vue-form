@@ -8,6 +8,7 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import firebaseConfig from '@/config/firebase'
 import FontAwesomeIcon from '@/plugins/FontAwesome'
+import ClickOutsideDirective from '@/plugins/ClickOutsideDirective'
 
 firebase.initializeApp(firebaseConfig)
 const forumApp = createApp(App)
@@ -42,6 +43,7 @@ requireComponent.keys().forEach(fileName => {
     componentConfig.default || componentConfig
   )
 })
+forumApp.use(ClickOutsideDirective)
 forumApp.use(FontAwesomeIcon)
 forumApp.use(router)
 forumApp.use(store)

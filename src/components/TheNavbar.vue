@@ -1,11 +1,11 @@
 <template>
-  <header class="header" id="header">
+  <header class="header" id="header" v-click-outside="() => mobileNavMenu = false">
 
     <router-link :to="{ name: 'Home' }" class="logo">
       <img src="../assets/svg/vueschool-logo.svg">
     </router-link>
 
-    <div class="btn-hamburger">
+    <div class="btn-hamburger" @click="mobileNavMenu = !mobileNavMenu">
       <!-- use .btn-humburger-active to open the menu -->
       <div class="top bar"></div>
       <div class="middle bar"></div>
@@ -13,11 +13,13 @@
     </div>
 
     <!-- use .navbar-open to open nav -->
-    <nav class="navbar">
+    <nav class="navbar" :class="{ 'navbar-open': mobileNavMenu }">
       <ul>
-
         <li v-if="authUser" class="navbar-user">
-          <a @click.prevent="userDropdownOpen  = !userDropdownOpen">
+          <a
+            @click.prevent="userDropdownOpen  = !userDropdownOpen"
+            v-click-outside="()=> userDropdownOpen = false"
+          >
             <img class="avatar-small" :src="authUser.avatar" :alt="authUser.name + 'profile image' ">
             <span>
                         {{authUser.name}}
@@ -44,6 +46,12 @@
         </li>
         <li v-if="!authUser" class="navbar-item">
           <router-link :to="{name: 'Register'}">Register</router-link>
+        </li>
+        <li v-if="authUser" class="navbar-mobile-item">
+          <router-link :to="{name: 'ProfilePage'}">View Profile</router-link>
+        </li>
+        <li v-if="authUser" class="navbar-mobile-item">
+          <a @click.prevent="signOut">SignOut</a>
         </li>
       </ul>
 
@@ -79,7 +87,8 @@ export default {
   name: 'TheNavbar',
   data () {
     return {
-      userDropdownOpen: false
+      userDropdownOpen: false,
+      mobileNavMenu: false
     }
   },
   computed: {
@@ -88,7 +97,13 @@ export default {
   methods: {
     signOut () {
       this.$store.dispatch('auth/signOut')
+      this.$router.push({ name: 'Home' })
     }
+  },
+  created () {
+    this.$router.beforeEach((to, from) => {
+      this.mobileNavMenu = false
+    })
   }
 }
 </script>

@@ -27,8 +27,8 @@ export default {
   async created () {
     const categories = await this.fetchAllCategories()
     // flat [[1,2,3,4],[22,33,44,55],[5,6,7,8,9]] ni [1,2,3,4,22,33,44,55,5,6,7,8,9] ga o'tkazib beradi.
-    const forumId = categories.map(category => category.forums).flat() // bu yerda map bitta listni ichida ikkita list qaytaradi
-    await this.fetchForums({ ids: forumId })
+    const forumIds = categories.map(category => category.forums).flat() // bu yerda map bitta listni ichida ikkita list qaytaradi
+    await this.fetchForums({ ids: forumIds })
     this.asyncDataStatus_fetched()
   }
 }
