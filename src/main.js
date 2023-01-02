@@ -9,6 +9,7 @@ import 'firebase/compat/auth'
 import firebaseConfig from '@/config/firebase'
 import FontAwesomeIcon from '@/plugins/FontAwesome'
 import ClickOutsideDirective from '@/plugins/ClickOutsideDirective'
+import PageScrollDirective from '@/plugins/PageScrollDirective'
 
 firebase.initializeApp(firebaseConfig)
 const forumApp = createApp(App)
@@ -45,6 +46,7 @@ requireComponent.keys().forEach(fileName => {
 })
 forumApp.use(ClickOutsideDirective)
 forumApp.use(FontAwesomeIcon)
+forumApp.use(PageScrollDirective)
 forumApp.use(router)
 forumApp.use(store)
 forumApp.mount('#app')
